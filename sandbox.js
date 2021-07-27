@@ -1,6 +1,6 @@
 const todoListElem = document.querySelector('#todo-list');
 console.log(todoListElem);
-let todoList = [];
+let todoList = ['Walk the dog', 'Study javascript', 'Eat dinner'];
 
 // createListItem(content)
 //   generate html li element with text and return
@@ -12,13 +12,28 @@ function createListItem(text, id)
     return li;
 }
 
-console.log(createListItem('Testing'));
-todoListElem.appendChild(createListItem('t', 1));
-console.log(todoListElem.innerHTML);
-
 // updateToDoList(todoList)
 // run createlistitem on each elem of the main array
 // set the innertext of ul to the generated html data
+function updateToDoList(list)
+{
+    //* Clear the current elements
+    while(todoListElem.firstChild) {
+        todoListElem.removeChild(todoListElem.firstChild);
+    }
+    //*/
+
+    // Filter the todoList here
+
+    // Display the todo list
+    let i = 0;
+    list.forEach(item => {
+        todoListElem.appendChild(createListItem(item, `li-${i}`));
+        i++;
+    });
+}
+
+updateToDoList(todoList);
 
 // An event listener on add, filter, delete and edit
 // update the main array according to the change the user makes
