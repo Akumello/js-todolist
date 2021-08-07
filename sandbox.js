@@ -12,8 +12,8 @@ function createListItem(text, id)
 {
     let li = document.createElement('li');
     li.setAttribute('class', 'list-group-item d-flex justify-content-between');
-    li.setAttribute('id', `${id}`);
-    li.innerHTML = `<div>${text}</div><input type="text" value="${text}" class="d-none" id=""></input><div style="cursor: pointer;"><i class="fas fa-edit p-1"></i><i class="fas fa-save p-1 px-2 d-none"></i><i class="fas fa-trash-alt p-1"></i></div>`;
+    li.setAttribute('id', `li-${id}`);
+    li.innerHTML = `<div>${text}</div><input type="text" value="${text}" class="d-none" id="input-${id}"></input><div style="cursor: pointer;"><i class="fas fa-edit p-1"></i><i class="fas fa-save p-1 px-2 d-none"></i><i class="fas fa-trash-alt p-1"></i></div>`;
     return li;
 }
 
@@ -29,7 +29,6 @@ function updateToDoList(list)
     //*/
 
     let newList;
-    console.log("Filter: " + filter);
     if (filter) {
         newList = list.filter(listItem => {
             return listItem.includes(filter);
@@ -45,7 +44,7 @@ function updateToDoList(list)
     list.forEach(item => {
         console.log(item);
         if(item === newList[0]) {
-            todoListElem.appendChild(createListItem(item, `li-${i}`));
+            todoListElem.appendChild(createListItem(item, `${i}`));
             newList.shift();
         }
         i++;
@@ -55,6 +54,8 @@ function updateToDoList(list)
 function addItem()
 {
     const item = addItemTextArea.value;
+    if(!item) { return; }
+    addItemTextArea.value = '';
     todoList.push(item);
     updateToDoList(todoList);
 }
@@ -96,7 +97,7 @@ todoListElem.addEventListener('click', e =>
         const index = e.target.parentNode.parentNode.id.match(num);
 
         // Remove the item from the todo list
-        let newToDo = e.target.parentNode.parentNode.firstChild.innerHTML;
+        let newToDo = document.querySelector(`#input-${index}`).value;
         // extract newToDo from input field
         todoList.splice(index, 1, `${newToDo}`);
 
@@ -112,7 +113,8 @@ todoListElem.addEventListener('click', e =>
         // Switch the sibling div to an input text field and change edit button to a save button
         e.target.classList.add('d-none');
         e.target.nextSibling.classList.remove('d-none');
-        e.target.parentNode.parentNode.firstChild.setAttribute('contenteditable', 'true');
+        e.target.parentNode.parentNode.firstChild.nextSibling.classList.remove('d-none');;
+        e.target.parentNode.parentNode.firstChild.setAttribute('class', 'd-none');
         console.log(e.target.parentNode);
     }
 });
